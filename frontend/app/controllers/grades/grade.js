@@ -10,14 +10,15 @@ export default Ember.ObjectController.extend({
 	}.property('meta.lock'),
 
 	params: function() {
-		var p = this._params(true);
+		var p = this._params();
 		return p;
 	}.property('meta.subjcode'),
 
-	_params: function() {
+	_params: function(exportgrade) {
 		return {
 			subjcode: this.get('meta.subjcode'),
-			section: this.get('meta.section')
+			section: this.get('meta.section'),
+			exportgrade: exportgrade
 		};
 	},
 	
@@ -83,6 +84,11 @@ export default Ember.ObjectController.extend({
 			} else {
 				toastr.error('You have entered an invalid grade. Please review your entries!');
 			}
+		},
+
+		export: function() {
+			var param = this._params(true);
+			window.open(EsmsUiENV.ApiHost + EsmsUiENV.Api + '/grades-export?' + Ember.$.param(param));
 		},
 
 		lock: function(v) {
